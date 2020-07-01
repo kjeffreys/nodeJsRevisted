@@ -1,3 +1,5 @@
+// Buffer reading for small chunks of large files
+
 var fs = require('fs')
 
 function readFruit(fd, fruits) {

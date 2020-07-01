@@ -1,3 +1,6 @@
+// Buffer reading for small chunks of large files
+// See fileRead.js for reading entire file at once
+
 var fs = require('fs');
 fd = fs.openSync('./data/veggie.txt', 'r');
 var veggies = "";
