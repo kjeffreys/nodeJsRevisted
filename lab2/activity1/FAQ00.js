@@ -42,13 +42,12 @@ class QA {
         this.id = id;
     }
 
-    static fromJson() {
-        return JSON.stringify(this)
+    writeJson() {
+        let fd = fs.openSync('test.json', 'w');
+        fs.writeSync(fd, JSON.stringify(this), null, null);
+        fs.closeSync(fd);
     }
-
-    static toJson(jsonObj) {
-        return jsonObj.toJson()
-    }
+    
 }
 // R2: The ability to update the content (answer text) of an existing Q&A from 
 //      existing persistent store (QA.json)
@@ -66,9 +65,13 @@ var myFaq= new QA('myQuestion?', 'myAnswer', 'myTags', 'myAuthor', 'myDate',
                     '000001');
 
 console.log(myFaq);
+myFaq.writeJson();
 
+/*
 fd = fs.openSync('test.json', 'w');
 fs.writeSync(fd, JSON.stringify(myFaq), null, null);
 fs.closeSync(fd);
+*/
+
 
 
