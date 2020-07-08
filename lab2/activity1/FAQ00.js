@@ -42,8 +42,12 @@ class QA {
         this.id = id;
     }
 
-    static toJson() {
+    static fromJson() {
         return JSON.stringify(this)
+    }
+
+    static toJson(jsonObj) {
+        return jsonObj.toJson()
     }
 }
 // R2: The ability to update the content (answer text) of an existing Q&A from 
