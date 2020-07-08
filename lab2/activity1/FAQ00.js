@@ -21,7 +21,7 @@ var fs = require('fs');
 
 // C5: Use the synchronous file I/O features in NodeJS
 
-// R1: The ability to write a Q&A to a persistent store (for now, QA.json)
+
 
 /*
 * NOTE: JS classes, introducted in ECMAScript2015, are syntactical sugar over
@@ -42,15 +42,45 @@ class QA {
         this.id = id;
     }
 
+    // R1: The ability to write a Q&A to a persistent store (for now, QA.json)
     writeJson() {
         let fd = fs.openSync('test.json', 'w');
         fs.writeSync(fd, JSON.stringify(this), null, null);
         fs.closeSync(fd);
     }
+
+    // R2: The ability to update the content (answer text) of an existing Q&A from 
+    //      existing persistent store (QA.json)
+    updateAnswer(id, newAnswer) {
+        let qaArray = new Array();
+        fs.readFile('./QA.json', function(err, data) {
+            if (err) {
+                console.log("Failed to open QA file.");
+            }
+            else {
+                console.log("Reading QA.json...");
+                qaArray = JSON.parse(data);
+                console.log("qaArray copied into memory");
+                console.log(qaArray);
+                console.log("qaArray[0].id: " + qaArray[0].id);
+                console.log("typeof qaArray[0].id: " + typeof qaArray[0].id);
+                //let selectIndex = qaArray.indexOf(qa => qa.id == id);
+                let selectIndex = qaArray.findIndex(qa => qa.id === id);
+                console.log(selectIndex);
+                qaArray[selectIndex].answer = newAnswer;
+                console.log("Updated entries");
+                console.log(qaArray);
+                let fd = fs.openSync("./test.json", "w");
+                fs.writeSync(fd, JSON.stringify(qaArray), null, null);
+                fs.closeSync(fd);
+
+            }
+        });
+
+    }
     
 }
-// R2: The ability to update the content (answer text) of an existing Q&A from 
-//      existing persistent store (QA.json)
+
 
 // R3: The ability to update the tags for a Q&A from ... (QA.json)
 
@@ -66,6 +96,7 @@ var myFaq= new QA('myQuestion?', 'myAnswer', 'myTags', 'myAuthor', 'myDate',
 
 console.log(myFaq);
 myFaq.writeJson();
+myFaq.updateAnswer(1567311476931.9548, 'This is the test for answer update.');
 
 /*
 fd = fs.openSync('test.json', 'w');
