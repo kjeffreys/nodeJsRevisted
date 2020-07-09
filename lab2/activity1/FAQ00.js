@@ -78,6 +78,57 @@ class QA {
         });
 
     }
+
+    updateTags(id, newTags) {
+        let qaArray = new Array();
+        fs.readFile('./QA.json', function(err, data) {
+            if (err) {
+                console.log("Failed to open QA file.");
+            }
+            else {
+                console.log("Reading QA.json...");
+                qaArray = JSON.parse(data);
+                console.log("qaArray copied into memory");
+                console.log(qaArray);
+                console.log("qaArray[0].id: " + qaArray[0].id);
+                console.log("typeof qaArray[0].id: " + typeof qaArray[0].id);
+                
+                let selectIndex = qaArray.findIndex(qa => qa.id === id);
+                console.log(selectIndex);
+                qaArray[selectIndex].tags = newTags;
+                console.log("Updated entries");
+                console.log(qaArray);
+                let fd = fs.openSync("./test.json", "w");
+                fs.writeSync(fd, JSON.stringify(qaArray), null, null);
+                fs.closeSync(fd);
+
+            }
+        });
+    }
+
+    deleteQA(id) {
+        let qaArray = new Array();
+        fs.readFile('./QA.json', function(err, data) {
+            if (err) {
+                console.log("Failed to open QA file.");
+            }
+            else {
+                console.log("Reading QA.json...");
+                qaArray = JSON.parse(data);
+                console.log("qaArray copied into memory");
+                
+                let deleteIndex = qaArray.findIndex(qa => qa.id === id);
+                console.log(deleteIndex);
+                qaArray.splice(deleteIndex, 1);
+                console.log("Updated entries");
+                console.log(qaArray);
+                let fd = fs.openSync("./test.json", "w");
+                fs.writeSync(fd, JSON.stringify(qaArray), null, null);
+                fs.closeSync(fd);
+
+            }
+        });
+    }
     
 }
 
@@ -97,6 +148,8 @@ var myFaq= new QA('myQuestion?', 'myAnswer', 'myTags', 'myAuthor', 'myDate',
 console.log(myFaq);
 myFaq.writeJson();
 myFaq.updateAnswer(1567311476931.9548, 'This is the test for answer update.');
+myFaq.updateTags(1567311527454.1174, ['testTag1', 'testTag2', 'testTag3']);
+myFaq.deleteQA(1567311527454.8557);
 
 /*
 fd = fs.openSync('test.json', 'w');
